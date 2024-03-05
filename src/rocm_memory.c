@@ -85,7 +85,8 @@ int rocm_memory_allocate_buffer(struct memory_ctx *ctx, int alignment, uint64_t 
 	hipError_t error;
 	size_t buf_size = (size + ACCEL_PAGE_SIZE - 1) & ~(ACCEL_PAGE_SIZE - 1);
 
-	error = hipMalloc(&d_A, buf_size);
+	//error = hipMalloc(&d_A, buf_size); remove it for reserving the contiguous memory
+        error = hipExtMallocWithFlags(&d_A, buf_size, hipDeviceMallocContiguous);
 	if (error != hipSuccess) {
 		printf("hipMalloc error=%d\n", error);
 		return FAILURE;
